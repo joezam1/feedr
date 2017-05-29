@@ -1,8 +1,22 @@
+// import yo, {substract} from './math'
+//
+// console.log(yo(1,2))
+// console.log(substract(2,1))
+import main, { add, subtract } from './math'
+
+// main is default
+// in curly brackets are non default
+
+console.log(add(1,2))
+console.log(subtract(1,2))
+main()
+
+
 const app = document.querySelector('#app')
 
-const state = {
+const state ={
   source: 'mashable',
-  loading:'',    //We load before the resquest and then we re set the load back to initial situation
+  //loading:'',    //We load before the resquest and then we re set the load back to initial situation
   articles: [
     {
       image: '',
@@ -17,20 +31,22 @@ const state = {
 
 function fetchUrl(url) {
   return fetch(`https://accesscontrolalloworiginall.herokuapp.com/${url}`)
+  //return fetch(`${url}`)
 }
 
 function fetchMashableArticles(pages) {
 
  const promises =  new Array(pages)
  .fill('')
- .map((_,i) => fetchurl('http://mashable.com/stories.json?page=${i}')
+ .map((_,i) => fetchUrl('http://mashable.com/stories.json?page=${i}')
 .then(res=>res.json()))
-
+  //console.log(res.json())
   return Promise.all(promises)
 
   return fetchUrl('http://migbylab.com/feed.json')
   .then(res => res.json())
   .then(data => {
+    console.log(data)
     return data.new.map(article => {
       return {
         image: article.feature_image,
@@ -46,7 +62,7 @@ function fetchMashableArticles(pages) {
 
 function fetchArticles(source) {
   if (source === 'mashable') {
-    return fetchMashableArticles()
+    return fetchMashableArticles(5)
   }
 }
 

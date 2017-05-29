@@ -1,7 +1,58 @@
+import main, { add, subtract } from './math'
+
+// main is default
+// in curly brackets are non default
+
+console.log(add(1,23222))
+console.log(subtract(1,2))
+main()
+
+
+
+//=======
+import {delegate, siblings,closest} from './utils'
+//main()
+
+//=======
+//console.log('hi there hello')
+
 const app = document.querySelector('#app')
 
+
+// //=====
+// Mashable: http://mashable.com/stories.json
+// Reddit: https://www.reddit.com/top.json
+// Digg: http://digg.com/api/news/popular.json
+
+//=====
+
+
+
+delegate('body', 'click', 'li', event =>{
+  const target = event.target || event.srcElement
+  if(!target || target.nodeName !='A' ) return
+  const selectedElem = document.getElementsByClassName('sourceClass')
+
+  state.source = selectedElem.innerText
+  render(app, state)
+})
+
+document.addEventListener('click',selectFeeder,false)
+
+function selectFeeder(event){
+  const target = event.target || event.srcElement
+  if(!target || target.nodeName !='LI' ) return
+  const selectedElem = document.getElementsByClassName('sourceClass')
+
+  state.source = selectedElem.innerText
+  render(app, state)
+}
+
+
+
+
 const state = {
-  source: 'mashable',
+  source: 'Digg',
   articles: [
     {
       image: '',
@@ -14,7 +65,13 @@ const state = {
   ]
 }
 
+
+
+
+
+
 function fetchUrl(url) {
+
   return fetch(`https://accesscontrolalloworiginall.herokuapp.com/${url}`)
 }
 
@@ -22,6 +79,7 @@ function fetchMashableArticles() {
   return fetchUrl('http://migbylab.com/feed.json')
   .then(res => res.json())
   .then(data => {
+    console.log(data)
     return data.new.map(article => {
       return {
         image: article.feature_image,
@@ -35,10 +93,61 @@ function fetchMashableArticles() {
   })
 }
 
+//====
+function fetchDiggArticles() {
+  return fetchUrl('http://digg.com/api/news/popular.json')
+  .then(res => res.json())
+  .then(info => {
+    console.log(info)
+    return info.data.feed.map(article => {
+      return {
+        image: article.content.media.images[0].original_url,
+        title: article.content.title,
+        theme: article.content.body,
+        impressions: article.fb_shares.count,
+        summary: article.content.description,
+        link: article.content.original_url
+      }
+    })
+  })
+}
+
+//====
+//====
+function fetchRedditArticles() {
+  return fetchUrl('https://www.reddit.com/top.json')
+  .then(res => res.json())
+  .then(info => {
+    console.log(info)
+    return info .data.children.map(article => {
+      return {
+        image: article.data.thumbnail,
+        title: article.data.title,
+        theme: article.data.subreddit_type,
+        impressions: article.data.num_comments,
+        summary: article.data.title,
+        link: article.data.permalink
+      }
+    })
+  })
+}
+//====
+
+
 function fetchArticles(source) {
-  if (source === 'mashable') {
+  if (source === 'Mashable') {
+    //fetchDiggArticles()
     return fetchMashableArticles()
   }
+  if (source === 'Digg') {
+    //fetchRedditArticles()
+    return fetchDiggArticles()
+  }
+  if (source === 'Reddit') {
+
+    return fetchRedditArticles()
+  }
+
 }
 
 fetchArticles(state.source)
@@ -71,11 +180,11 @@ function render(container, data) {
       <a href="#"><h1>Feedr</h1></a>
       <nav>
         <ul>
-          <li><a href="#">News Source: <span>Source Name</span></a>
+          <li><a href="#">News Source: <span>${data.source}</span></a>
             <ul>
-                <li><a href="#">Source 1</a></li>
-                <li><a href="#">Source 2</a></li>
-                <li><a href="#">Source 3</a></li>
+                <li><a href="#" class="sourceClass" data-sourceid="1">Mashable</a></li>
+                <li><a href="#" class="sourceClass" data-sourceid="2">Digg</a></li>
+                <li><a href="#" class="sourceClass" data-sourceid="3">Reddit</a></li>
             </ul>
           </li>
         </ul>

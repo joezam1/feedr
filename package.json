@@ -1,0 +1,26 @@
+{
+  "name": "a2-feedr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --hot --inline"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kikitse/A2-Feedr.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kikitse/A2-Feedr/issues"
+  },
+  "homepage": "https://github.com/kikitse/A2-Feedr#readme",
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-env": "^1.4.0",
+    "webpack": "^1.15.0",
+    "webpack-dev-server": "^1.16.5"
+  }
+}
